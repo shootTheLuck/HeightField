@@ -33,7 +33,7 @@ player.position.y = height;
 height = heightField.getHeightAt(playerPosition.x, playerPosition.z);
 player.position.y = height;
 
-// with getInfoAt accesses face information (face triangle and normal) and height at // same time:
+// with getInfoAt accesses face information (face triangle and normal) and height a the same time:
 const info = heightField.getInfoAt(playerPosition.x, playerPosition.z);
 player.position.y = info.height;
 ```
