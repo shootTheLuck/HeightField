@@ -242,8 +242,10 @@ class HeightField extends THREE.Mesh {
         margin = Math.max( 1, margin );
 
         let tileWidth = this.geometry.parameters.width;
+        let tileHeight = this.geometry.parameters.height;
 
-        let marginStart = tileWidth / 2 - margin;
+        let marginStartX = tileWidth / 2 - margin;
+        let marginStartZ = tileHeight / 2 - margin;
 
         let positions = this.geometry.getAttribute( "position" );
         let array = positions.array;
@@ -253,35 +255,45 @@ class HeightField extends THREE.Mesh {
             let absX = Math.abs( positions.getX( i ) );
             let absZ = Math.abs( positions.getZ( i ) );
 
-            let distFromMarginStart = Math.max( absX - marginStart, absZ - marginStart );
-            let distFromCorner = Math.sqrt(
-                ( absX - marginStart ) * ( absX - marginStart ) +
-                ( absZ - marginStart ) * ( absZ - marginStart )
-            );
+            let distFromMarginStartX = absX - marginStartX;
+            let distFromMarginStartZ = absZ - marginStartZ;
 
-            if ( distFromMarginStart > 0 ) {
+            let y = positions.getY( i );
+            let newY = 0;
 
-                let y = positions.getY( i );
-                let newY = 0;
+            // rounded corners
+            if ( distFromMarginStartX > 0 && distFromMarginStartZ > 0) {
 
-                if ( Math.abs( absX - absZ ) < distFromCorner ) {
+                let distFromCorner = Math.sqrt(
+                    ( absX - marginStartX ) * ( absX - marginStartX ) +
+                    ( absZ - marginStartZ ) * ( absZ - marginStartZ )
+                );
 
-                    let amount = Math.min( 1, distFromCorner / margin );
-                    newY = THREE.MathUtils.lerp( y, height, amount );
+                let amount = Math.min( 1, distFromCorner / margin );
+                newY = THREE.MathUtils.lerp( y, height, amount );
 
-                } else {
+            } else if ( distFromMarginStartX > 0 ) {
 
-                    let amount = Math.min( 1, distFromMarginStart / margin );
-                    newY = THREE.MathUtils.lerp( y, height, amount );
+                let amount = Math.min( 1, distFromMarginStartX / margin );
+                newY = THREE.MathUtils.lerp( y, height, amount );
 
-                }
+            } else if ( distFromMarginStartZ > 0 ) {
 
-                positions.setY( i, newY );
+                let amount = Math.min( 1, distFromMarginStartZ / margin );
+                newY = THREE.MathUtils.lerp( y, height, amount );
+
+            } else {
+
+                newY = y;
 
             }
 
-        }
 
+            positions.setY( i, newY );
+
+
+
+        }
         this.updateGeometry();
         this.edgeHeight = height;
 
@@ -292,14 +304,14 @@ class HeightField extends THREE.Mesh {
         var defaults = {
             height: 0,
             margin: 1,
-            easingMethod: "linear",
+            easingMethod: function(t) {return t;},
             offsetX: 0,
             offsetZ: 0,
         };
 
         let height = typeof opts.height == "number" ? opts.height: defaults.height;
         let margin = typeof opts.margin == "number" ? opts.margin: defaults.margin;
-        let easingMethod = typeof opts.easingMethod == "string" ? easing[ opts.easingMethod ]: easing[ defaults.easingMethod ];
+        let easingMethod = typeof opts.easingMethod == "function" ? opts.easingMethod: defaults.easingMethod;
         let offsetX = typeof opts.offsetX == "number" ? opts.offsetX: defaults.offsetX;
         let offsetZ = typeof opts.offsetZ == "number" ? opts.offsetZ: defaults.offsetZ;
 
@@ -307,7 +319,8 @@ class HeightField extends THREE.Mesh {
         margin = Math.max( 1, margin );
 
         let tileWidth = this.geometry.parameters.width;
-        let radius = tileWidth / 2 - margin;
+        let tileHeight = this.geometry.parameters.height;
+        let radius = Math.min( tileWidth, tileHeight ) / 2 - margin;
 
         let positions = this.geometry.getAttribute( "position" );
         let array = positions.array;
@@ -326,7 +339,6 @@ class HeightField extends THREE.Mesh {
                 let diff = dist - radius;
                 let amount = Math.min( 1, diff / margin );
 
-                // let ease = easing[opts.easing](amount);
                 let ease = easingMethod( amount );
                 let newY = THREE.MathUtils.lerp( v.y, height, ease );
                 positions.setY( i, newY );
@@ -357,7 +369,9 @@ class HeightField extends THREE.Mesh {
         /* margin can't be less than 1 */
         margin = Math.max( 1, margin );
 
-        const radius = this.geometry.parameters.width / 2 - margin;
+        let tileWidth = this.geometry.parameters.width;
+        let tileHeight = this.geometry.parameters.height;
+        let radius = Math.min( tileWidth, tileHeight ) / 2 - margin;
 
         const positions = this.geometry.getAttribute( "position" );
         const array = positions.array;
