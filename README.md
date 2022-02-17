@@ -1,7 +1,7 @@
 # HeightField
 HeightField mesh for Three.js.
 
-##How do I use it?
+## How do I use it?
 ```javascript
 // import
 import {HeightField} from "./HeightField.js";
