@@ -1,6 +1,6 @@
 
 import {HeightField} from "./HeightField.js";
-import {SimplexNoise} from "../js/three.js-r133/examples/jsm/math/SimplexNoise.js";
+import {SimplexNoise} from "./lib/SimplexNoise.js";
 
 const SIZE = 1000;
 
