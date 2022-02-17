@@ -8,9 +8,10 @@ import {HeightField} from "./HeightField.js";
 
 // heightField extends THREE.Mesh:
 const geometry = new THREE.PlaneBufferGeometry(SIZE, SIZE, 64, 64);
-heightFieldGeometry.rotateX(-Math.PI/2);
+geometry.rotateX(-Math.PI/2);
 const material = new THREE.MeshStandardMaterial();
 const heightField = new HeightField(geometry, material);
+scene.add(heightField);
 
 // apply optional heightFunction:
 function applyNoiseHeights(x, z) {
