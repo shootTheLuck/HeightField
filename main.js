@@ -1,7 +1,7 @@
 
 import {HeightField} from "./HeightField.js";
 import {SimplexNoise} from "./lib/SimplexNoise.js";
-import {ViewControls} from "https://shootTheLuck.github.io/View-Controls/ViewControls.js";
+import {ViewControls} from "https://shootTheLuck.github.io/ViewControls/ViewControls.js";
 
 const SIZE = 1000;
 
