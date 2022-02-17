@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-import { easing } from "../js/mjs/easing.js";
+//import { easing } from "../js/mjs/easing.js";
 
 const v1 = new THREE.Vector3();
 const v2 = new THREE.Vector3();
