@@ -1,7 +1,4 @@
 
-
-import {ViewControls} from "../View-Controls/ViewControls.js";
-import {Noise} from "../js/mjs/Noise.js";
 import {HeightField} from "./HeightField.js";
 import {SimplexNoise} from "../js/three.js-r133/examples/jsm/math/SimplexNoise.js";
 
