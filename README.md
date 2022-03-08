@@ -15,27 +15,27 @@ scene.add(heightField);
 
 // apply optional heightFunction:
 function applyNoiseHeights(x, z) {
-	// ...perlin generation etc
-	const whatever = 1;
-	return whatever;
+    // ...perlin generation etc
+    const whatever = 1;
+    return whatever;
 }
 heightField.applyHeightFunction(getHeightWithNoise);
 
-// access the height of any position as required
 const player = {};
 player.position = {x: 10, y: 0, z -10};
 var height;
 
+// access the height of any position as required:
 // with getHeightFunctionAt (fastest):
-height = heightField.getHeightFunctionAt(playerPosition.x, playerPosition.z);
+height = heightField.getHeightFunctionAt(player.position.x, player.position.z);
 player.position.y = height;
 
 // with getHeightAt (less fast but typically faster than raycasting):
-height = heightField.getHeightAt(playerPosition.x, playerPosition.z);
-player.position.y = height;
+// height = heightField.getHeightAt(player.position.x, player.position.z);
+// player.position.y = height;
 
 // with getInfoAt accesses face information (face triangle and normal) and height a the same time:
-const info = heightField.getInfoAt(playerPosition.x, playerPosition.z);
-player.position.y = info.height;
+// const info = heightField.getInfoAt(player.position.x, player.position.z);
+// player.position.y = info.height;
 ```
 
