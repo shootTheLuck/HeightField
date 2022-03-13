@@ -1,5 +1,6 @@
 # HeightField
-HeightField mesh for Three.js.
+HeightField for Three.js. HeightField extends THREE.Mesh with convenient methods for
+setting contours and getting height at any point.
 
 ## How do I use it?
 ```javascript
