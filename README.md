@@ -1,5 +1,5 @@
 # HeightField
-HeightField for Three.js. HeightField extends THREE.Mesh with convenient methods for
+HeightField for Three.js extends THREE.Mesh with convenient methods for
 setting contours and getting height at any point.
 
 ## How do I use it?
@@ -8,34 +8,34 @@ setting contours and getting height at any point.
 import {HeightField} from "./HeightField.js";
 
 // heightField extends THREE.Mesh:
-const geometry = new THREE.PlaneBufferGeometry(SIZE, SIZE, 64, 64);
+const geometry = new THREE.PlaneGeometry(SIZE, SIZE, 64, 64);
 geometry.rotateX(-Math.PI/2);
 const material = new THREE.MeshStandardMaterial();
 const heightField = new HeightField(geometry, material);
 scene.add(heightField);
 
 // apply optional heightFunction:
-function applyNoiseHeights(x, z) {
+function applyNoise(x, z) {
     // ...perlin generation etc
     const whatever = 1;
     return whatever;
 }
-heightField.applyHeightFunction(getHeightWithNoise);
+heightField.applyHeightFunction(applyNoise);
 
 const player = {};
-player.position = {x: 10, y: 0, z -10};
+player.position = {x: 10, y: 0, z: -10};
 var height;
 
 // access the height of any position as required:
-// with getHeightFunctionAt (fastest):
+// with .getHeightFunctionAt(x, z) (fastest):
 height = heightField.getHeightFunctionAt(player.position.x, player.position.z);
 player.position.y = height;
 
-// with getHeightAt (less fast but typically faster than raycasting):
+// with .getHeightAt(x, z) (slower but typically faster than raycasting):
 // height = heightField.getHeightAt(player.position.x, player.position.z);
 // player.position.y = height;
 
-// with getInfoAt accesses face information (face triangle and normal) and height a the same time:
+// with .getInfoAt(x, z) accesses face information (face triangle and normal) and height at the same time:
 // const info = heightField.getInfoAt(player.position.x, player.position.z);
 // player.position.y = info.height;
 ```
