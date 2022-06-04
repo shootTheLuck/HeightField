@@ -97,9 +97,9 @@ class HeightField extends THREE.Mesh {
 
             return info.normal;
 
-}
+        }
 
-}
+    }
 
     testIfVertexOnEdge( x, z ) {
 
@@ -291,8 +291,6 @@ class HeightField extends THREE.Mesh {
 
             positions.setY( i, newY );
 
-
-
         }
         this.updateGeometry();
         this.edgeHeight = height;
@@ -482,7 +480,6 @@ class HeightField extends THREE.Mesh {
         this.updateGeometry();
 
     }
-
 
 }
 
