@@ -1,5 +1,6 @@
 
 import {HeightField} from "./HeightField.js";
+import {HeightFieldGeometry} from "./HeightFieldGeometry.js";
 import {SimplexNoise} from "./lib/SimplexNoise.js";
 import {ViewControls} from "https://shootTheLuck.github.io/ViewControls/ViewControls.js";
 
@@ -56,11 +57,8 @@ function getCoastWithNoise(x, z) {
     return Math.pow(value1, 3.0) * SIZE/100;
 }
 
-const heightFieldGeometry = new THREE.PlaneBufferGeometry(SIZE, SIZE, 64, 64);
-heightFieldGeometry.rotateX(-Math.PI/2);
-
+const heightFieldGeometry = new HeightFieldGeometry(SIZE, SIZE, 64, 64);
 const heightFieldMaterial = new THREE.MeshStandardMaterial();
-
 const heightField = new HeightField(heightFieldGeometry, heightFieldMaterial);
 
 heightField.applyHeightFunction(getHeightWithNoise);
