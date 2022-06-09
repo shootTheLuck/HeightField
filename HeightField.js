@@ -145,7 +145,7 @@ class HeightField extends THREE.Mesh {
             const y = positions[ i + 1 ];
             const z = positions[ i + 2 ];
 
-            if ( this.testIfVertexOnEdge( x, z ) ) {
+            if ( !this.testIfVertexOnEdge( x, z ) ) {
 
                 continue;
 
