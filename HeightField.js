@@ -205,6 +205,8 @@ class HeightField extends THREE.Mesh {
 
         }
 
+        this.geometry.getAttribute( "normal" ).needsUpdate = true;
+
     }
 
     getHeightAt( x, z, matrix ) {
