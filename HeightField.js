@@ -17,9 +17,6 @@ const vNeighbor6 = new THREE.Vector3();
 const vCross = new THREE.Vector3();
 const vSum = new THREE.Vector3();
 
-function returnZero( x, z ) {
-    return 0;
-}
 
 class HeightField extends THREE.Mesh {
 
@@ -42,10 +39,14 @@ class HeightField extends THREE.Mesh {
 
         } else {
 
-            this.heightFunction = returnZero;
+            this.heightFunction = HeightField.returnZero;
 
         }
 
+    }
+
+    static returnZero(x, z) {
+        return 0;
     }
 
     getInfoAt( x, z, matrix ) {
@@ -120,7 +121,7 @@ class HeightField extends THREE.Mesh {
 
     }
 
-    fixEdgeNormals( heightFunction = this.heightFunction ) {
+    fixEdgeNormals( heightFunction = this.heightFunction, position = this.position ) {
 
         this.updateMatrixWorld();
         const geometry = this.geometry;
@@ -132,7 +133,7 @@ class HeightField extends THREE.Mesh {
         }
 
         box3.copy( geometry.boundingBox );
-        box3.applyMatrix4( this.matrix );
+        box3.applyMatrix4( this.matrixWorld );
         const width = box3.max.x - box3.min.x;
         const stride = width / geometry.parameters.widthSegments;
 
@@ -152,7 +153,7 @@ class HeightField extends THREE.Mesh {
             }
 
             vPosition.set( x, y, z );
-            vPosition.add( this.position );
+            vPosition.add( position );
             vSum.set( 0, 0, 0 );
 
             const right = vPosition.x + stride;
