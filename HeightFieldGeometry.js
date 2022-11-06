@@ -2,10 +2,12 @@
 /*
  * PlaneGeometry constructor code from THREE but oriented with y-axis
  * pointing up (no need to rotateX -Math.PI/2). toJSON method is
- * enhanced to serialize the heights and fromHeightMap method is a
+ * enhanced to serialize the heights, and fromHeightMap method is a
  * convenient way to generate heights from an image url.
  *
  **/
+
+import * as THREE from "three";
 
 class HeightFieldGeometry extends THREE.BufferGeometry {
 

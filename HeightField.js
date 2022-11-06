@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 
+import * as THREE from "three";
 //import { easing } from "../js/mjs/easing.js";
 
 const v1 = new THREE.Vector3();
@@ -414,8 +415,8 @@ class HeightField extends THREE.Mesh {
 
         for ( let i = 0; i < array.length; i += 3 ) {
 
-            let x = array[ i + 0 ] + position.x;
-            let z = array[ i + 2 ] + position.z;
+            const x = array[ i + 0 ] + position.x;
+            const z = array[ i + 2 ] + position.z;
             array[ i + 1 ] = func( x, z );
 
         }

@@ -1,4 +1,5 @@
 
+import * as THREE from "three";
 import {HeightField} from "./HeightField.js";
 import {HeightFieldGeometry} from "./HeightFieldGeometry.js";
 import {SimplexNoise} from "./lib/SimplexNoise.js";
