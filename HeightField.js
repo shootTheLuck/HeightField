@@ -94,12 +94,33 @@ class HeightField extends THREE.Mesh {
 
     getNormalAt( x, z, matrix ) {
 
-        let info = this.getInfoAt( x, z, matrix );
+        const info = this.getInfoAt( x, z, matrix );
         if ( info ) {
 
             return info.normal;
 
         }
+
+    }
+
+    getHeightAt( x, z, matrix ) {
+
+        const info = this.getInfoAt( x, z, matrix );
+        if ( info ) {
+
+            return info.height;
+
+        } else {
+
+            return this.getHeightFunctionAt( x, z );
+
+        }
+
+    }
+
+    getHeightFunctionAt( x, z ) {
+
+        return this.heightFunction( x, z );
 
     }
 
@@ -208,27 +229,6 @@ class HeightField extends THREE.Mesh {
         }
 
         this.geometry.getAttribute( "normal" ).needsUpdate = true;
-
-    }
-
-    getHeightAt( x, z, matrix ) {
-
-        let info = this.getInfoAt( x, z, matrix );
-        if ( info ) {
-
-            return info.height;
-
-        } else {
-
-            return this.getHeightFunctionAt( x, z );
-
-        }
-
-    }
-
-    getHeightFunctionAt( x, z ) {
-
-        return this.heightFunction( x, z );
 
     }
 
