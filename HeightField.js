@@ -50,11 +50,10 @@ class HeightField extends THREE.Mesh {
         return 0;
     }
 
-    getInfoAt( x, z, matrix ) {
+    getInfoAt( x, z, matrix = this.matrix ) {
 
         const positions = this.geometry.getAttribute( "position" );
         const array = this.geometry.index.array;
-        const transform = matrix || this.matrix;
         const infoObject = this.infoObject;
 
         for ( let i = 0; i < array.length; i += 3 ) {
@@ -63,9 +62,9 @@ class HeightField extends THREE.Mesh {
             v2.fromBufferAttribute( positions, array[ i + 1 ] );
             v3.fromBufferAttribute( positions, array[ i + 2 ] );
 
-            v1.applyMatrix4( transform );
-            v2.applyMatrix4( transform );
-            v3.applyMatrix4( transform );
+            v1.applyMatrix4( matrix );
+            v2.applyMatrix4( matrix );
+            v3.applyMatrix4( matrix );
 
             /// calculate baycentric weights
             /// https://codeplea.com/triangular-interpolation

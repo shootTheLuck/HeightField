@@ -88,10 +88,9 @@ const marker = new THREE.Mesh(
 );
 marker.castShadow = true;
 
-marker.update = function() {
-    const now = Date.now();
-    this.position.x = Math.sin(now/2000) * SIZE/4;
-    this.position.z = Math.cos(now/2000) * SIZE/4;
+marker.update = function(timer) {
+    this.position.x = Math.sin(timer/2000) * SIZE/4;
+    this.position.z = Math.cos(timer/2000) * SIZE/4;
 
     // this.position.y = heightField.getHeightAt(this.position.x, this.position.z) + SIZE/201;
     const info = heightField.getInfoAt(this.position.x, this.position.z);
@@ -99,26 +98,22 @@ marker.update = function() {
 }
 
 scene.add(marker);
-marker.update();
-
-function onWindowResize() {
-    updateRendererSize(window.innerWidth, window.innerHeight);
-}
-
-function updateRendererSize(width, height) {
-    renderer.setSize(width, height);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-}
-
-window.addEventListener('resize', onWindowResize);
 
 function animate(timeStamp) {
-    marker.update();
+    marker.update(timeStamp);
     viewControls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
 
+animate(0);
 
-animate();
+function setDisplaySize(width, height) {
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+}
+
+window.addEventListener("resize", () => {
+    setDisplaySize(window.innerWidth, window.innerHeight);
+});
