@@ -47,14 +47,14 @@ const simplex = new SimplexNoise();
 function getHeightWithNoise(x, z) {
     // adding 1 here to make value always positive
     const frequency = 5;
-    let value1 = simplex.noise(x * frequency / SIZE, z * frequency / SIZE) + 1 ;
+    let value1 = simplex.noise(x * frequency / SIZE, z * frequency / SIZE) + 1;
     return Math.pow(value1, 3.0) * SIZE/100;
 }
 
 function getCoastWithNoise(x, z) {
     // adding 1 here to make value always positive
     const frequency = 15;
-    let value1 = simplex.noise(x * frequency / SIZE, z * frequency / SIZE) + 1 ;
+    let value1 = simplex.noise(x * frequency / SIZE, z * frequency / SIZE) + 1;
     return Math.pow(value1, 3.0) * SIZE/100;
 }
 
@@ -82,19 +82,21 @@ const water = new THREE.Mesh(
 water.position.y = -1;
 scene.add(water);
 
+const markerRadius = SIZE/150;
 const marker = new THREE.Mesh(
-    new THREE.SphereGeometry(SIZE/200),
+    new THREE.SphereGeometry(markerRadius),
     new THREE.MeshStandardMaterial({color: 0xff0000})
 );
+marker.geometry.translate(0, markerRadius/2, 0);
 marker.castShadow = true;
 
 marker.update = function(timer) {
     this.position.x = Math.sin(timer/2000) * SIZE/4;
     this.position.z = Math.cos(timer/2000) * SIZE/4;
 
-    // this.position.y = heightField.getHeightAt(this.position.x, this.position.z) + SIZE/201;
+    // this.position.y = heightField.getHeightAt(this.position.x, this.position.z);
     const info = heightField.getInfoAt(this.position.x, this.position.z);
-    this.position.y = info.height + SIZE/201;
+    this.position.y = info.height;
 }
 
 scene.add(marker);
