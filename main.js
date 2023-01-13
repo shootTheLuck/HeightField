@@ -87,7 +87,7 @@ const marker = new THREE.Mesh(
     new THREE.SphereGeometry(markerRadius),
     new THREE.MeshStandardMaterial({color: 0xff0000})
 );
-marker.geometry.translate(0, markerRadius/2, 0);
+marker.geometry.translate(0, markerRadius, 0);
 marker.castShadow = true;
 
 marker.update = function(timer) {
