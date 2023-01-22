@@ -1,5 +1,6 @@
 
 import * as THREE from "three";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 import {HeightField} from "./HeightField.js";
 import {HeightFieldGeometry} from "./HeightFieldGeometry.js";
 import {SimplexNoise} from "./lib/SimplexNoise.js";
@@ -19,6 +20,11 @@ camera.position.set(0, SIZE * 0.3, SIZE * 0.6);
 camera.lookAt(scene.position);
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+
+const stats = new Stats();
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.top = '0px';
+document.body.appendChild(stats.domElement);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 directionalLight.position.set(-SIZE/2, SIZE/4, 0);
@@ -105,6 +111,7 @@ function animate(timeStamp) {
     marker.update(timeStamp);
     viewControls.update();
     renderer.render(scene, camera);
+    stats.update();
     requestAnimationFrame(animate);
 }
 
