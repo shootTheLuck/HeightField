@@ -27,6 +27,7 @@ class HeightField extends THREE.Mesh {
         this.edgeHeight = null;
         this.userData.isHeightField = true;
         this.isHeightField = true;
+        this.triangles = [];
         this.infoObject = {
             face: new THREE.Triangle(),
             normal: new THREE.Vector3(),
@@ -41,16 +42,46 @@ class HeightField extends THREE.Mesh {
         } else {
 
             this.heightFunction = HeightField.returnZero;
+            this.getTriangles( this.matrix );
 
         }
 
+        this.refMatrix = new THREE.Matrix4();
+
     }
 
-    static returnZero(x, z) {
+    static returnZero( x, z ) {
         return 0;
     }
 
-    getInfoAt( x, z, matrix = this.matrix ) {
+    getTriangles( matrix = this.matrix ) {
+        this.triangles.length = 0;
+        const a = new THREE.Vector3();
+        const b = new THREE.Vector3();
+        const c = new THREE.Vector3();
+        const positions = this.geometry.getAttribute( "position" );
+        const array = this.geometry.index.array;
+
+        for ( let i = 0; i < array.length; i += 3 ) {
+
+            a.fromBufferAttribute( positions, array[ i + 0 ] );
+            b.fromBufferAttribute( positions, array[ i + 1 ] );
+            c.fromBufferAttribute( positions, array[ i + 2 ] );
+
+            a.applyMatrix4( matrix );
+            b.applyMatrix4( matrix );
+            c.applyMatrix4( matrix );
+
+            const t = new THREE.Triangle();
+            t.set( a, b, c );
+            this.triangles.push( t );
+        }
+
+        return this.triangles;
+
+    }
+
+    getInfoAtOLD( x, z, matrix = this.matrix ) {
 
         const positions = this.geometry.getAttribute( "position" );
         const array = this.geometry.index.array;
@@ -83,6 +114,49 @@ class HeightField extends THREE.Mesh {
                 infoObject.face.set( v1, v2, v3 );
                 infoObject.face.getNormal( infoObject.normal );
                 infoObject.height = w1 * v1.y + w2 * v2.y + w3 * v3.y;
+                return infoObject;
+
+            }
+
+        }
+
+    }
+
+    getInfoAt( x, z, matrix = this.matrix ) {
+
+        this.updateMatrix();
+
+        /// use precomputed triangles if matrix has not changed
+
+        if ( !this.refMatrix.equals( this.matrix ) ) {
+            this.getTriangles();
+            this.refMatrix.copy( this.matrix );
+        }
+
+        const triangles = this.triangles;
+        const infoObject = this.infoObject;
+
+        for ( let i = 0; i < triangles.length; i++ ) {
+
+            const { a, b, c } = triangles[ i ];
+
+            /// calculate baycentric weights
+            /// https://codeplea.com/triangular-interpolation
+            const w1 = ( x * ( c.z - b.z ) + b.x * ( z - c.z ) + c.x * ( b.z - z ) ) /
+                      ( a.x * ( c.z - b.z ) + b.x * ( a.z - c.z ) + c.x * ( b.z - a.z ) );
+            const w2 = - ( x * ( c.z - a.z ) + a.x * ( z - c.z ) + c.x * ( a.z - z ) ) /
+                      ( a.x * ( c.z - b.z ) + b.x * ( a.z - c.z ) + c.x * ( b.z - a.z ) );
+            const w3 = 1.0 - w1 - w2;
+
+            if ( w1 < 0 || w2 < 0 || w3 < 0 ) {
+
+                continue;
+
+            } else {
+
+                infoObject.face.set( a, b, c );
+                infoObject.face.getNormal( infoObject.normal );
+                infoObject.height = w1 * a.y + w2 * b.y + w3 * c.y;
                 return infoObject;
 
             }
@@ -404,6 +478,7 @@ class HeightField extends THREE.Mesh {
 
         this.geometry.getAttribute( "position" ).needsUpdate = true;
         this.geometry.computeVertexNormals();
+        this.getTriangles( this.matrix );
 
     }
 
