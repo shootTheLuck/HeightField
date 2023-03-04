@@ -1,9 +1,9 @@
 
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import {SimplexNoise} from "three/examples/jsm/math/SimplexNoise.js";
 import {HeightField} from "./HeightField.js";
 import {HeightFieldGeometry} from "./HeightFieldGeometry.js";
-import {SimplexNoise} from "./lib/SimplexNoise.js";
 import {ViewControls} from "https://shootTheLuck.github.io/ViewControls/ViewControls.js";
 
 const SIZE = 1000;
