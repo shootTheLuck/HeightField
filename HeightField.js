@@ -54,17 +54,22 @@ class HeightField extends THREE.Mesh {
     getTriangles( matrix = this.matrix ) {
 
         this.triangles.length = 0;
+        var vA, vB, vC;
         const a = new THREE.Vector3();
         const b = new THREE.Vector3();
         const c = new THREE.Vector3();
-        const positions = this.geometry.getAttribute( "position" );
-        const array = this.geometry.index.array;
+        const positions = this.geometry.getAttribute( "position" ).array;
+        const indices = this.geometry.index.array;
 
-        for ( let i = 0; i < array.length; i += 3 ) {
+        for ( let i = 0; i < indices.length; i += 3 ) {
 
-            a.fromBufferAttribute( positions, array[ i + 0 ] );
-            b.fromBufferAttribute( positions, array[ i + 1 ] );
-            c.fromBufferAttribute( positions, array[ i + 2 ] );
+            vA = indices[ i + 0 ] * 3;
+            vB = indices[ i + 1 ] * 3;
+            vC = indices[ i + 2 ] * 3;
+
+            a.fromArray( positions, vA );
+            b.fromArray( positions, vB );
+            c.fromArray( positions, vC );
 
             a.applyMatrix4( matrix );
             b.applyMatrix4( matrix );
