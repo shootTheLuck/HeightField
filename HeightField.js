@@ -42,11 +42,8 @@ class HeightField extends THREE.Mesh {
         } else {
 
             this.heightFunction = HeightField.returnZero;
-            this.getTriangles( this.matrix );
 
         }
-
-        this.refMatrix = new THREE.Matrix4();
 
     }
 
@@ -55,6 +52,7 @@ class HeightField extends THREE.Mesh {
     }
 
     getTriangles( matrix = this.matrix ) {
+
         this.triangles.length = 0;
         const a = new THREE.Vector3();
         const b = new THREE.Vector3();
@@ -126,11 +124,9 @@ class HeightField extends THREE.Mesh {
 
         this.updateMatrix();
 
-        /// use precomputed triangles if matrix has not changed
-
-        if ( !this.refMatrix.equals( this.matrix ) ) {
+        if ( this.trianglesNeedUpdate ) {
             this.getTriangles();
-            this.refMatrix.copy( this.matrix );
+            this.trianglesNeedUpdate = false;
         }
 
         const triangles = this.triangles;
