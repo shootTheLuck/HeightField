@@ -217,7 +217,7 @@ class HeightField extends THREE.Mesh {
 
     }
 
-    fixEdgeNormals( heightFunction = this.heightFunction, position = this.position ) {
+    computeNormals( heightFunction = this.heightFunction, position = this.position ) {
 
         this.updateMatrixWorld();
         const geometry = this.geometry;
@@ -232,6 +232,7 @@ class HeightField extends THREE.Mesh {
         box3.applyMatrix4( this.matrixWorld );
         const width = box3.max.x - box3.min.x;
         const stride = width / geometry.parameters.widthSegments;
+        // const stride = 0.000001;
 
         const positions = geometry.attributes.position.array;
         const normals = geometry.attributes.normal.array;
@@ -241,12 +242,6 @@ class HeightField extends THREE.Mesh {
             const x = positions[ i + 0 ];
             const y = positions[ i + 1 ];
             const z = positions[ i + 2 ];
-
-            if ( !this.testIfVertexOnEdge( x, z ) ) {
-
-                continue;
-
-            }
 
             vPosition.set( x, y, z );
             vPosition.add( position );
@@ -475,10 +470,11 @@ class HeightField extends THREE.Mesh {
 
     }
 
-    updateGeometry() {
+    updateGeometry(func = this.heightFunction, position = this.position) {
 
         this.geometry.getAttribute( "position" ).needsUpdate = true;
-        this.geometry.computeVertexNormals();
+        // this.geometry.computeVertexNormals();
+        this.computeNormals( func, position );
         this.getTriangles( this.matrix );
 
     }
@@ -496,8 +492,8 @@ class HeightField extends THREE.Mesh {
 
         }
 
-        this.updateGeometry();
         this.heightFunction = func;
+        this.updateGeometry( this.heightFunction, position );
 
     }
 
